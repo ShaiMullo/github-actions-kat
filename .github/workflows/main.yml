@@ -9,3 +9,14 @@ jobs:
         uses: actions/checkout@v4
       - name: Build application
         run: ci/build-app.sh
+  
+  Test:
+    runs-on: ubuntu-latest
+    container: gradle:6-jdk11
+    needs: Build
+    steps:
+      - name: Clone down repository
+        uses: actions/checkout@v4
+      - name: Run tests
+        run: ci/unit-test-app.sh
+        
