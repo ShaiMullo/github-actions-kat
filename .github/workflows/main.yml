@@ -30,7 +30,7 @@ jobs:
           path: .
           
       - name: Run Linting
-        uses: super-linter/super-linter/slim@v4
+        uses: super-linter/super-linter/slim@v7
         env:
          DEFAULT_BRANCH: main
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
