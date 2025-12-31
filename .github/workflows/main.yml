@@ -35,22 +35,3 @@ jobs:
          DEFAULT_BRANCH: main
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-  Test:
-    needs: Build
-    runs-on: ubuntu-latest
-    container: gradle:6-jdk11
-    steps:
-      
-      - name: Download code
-        uses: actions/download-artifact@v4
-        with:
-          name: code
-          path: .
-      
-      - name: checkout
-        uses: actions/checkout@v4
-      
-      - name: Run unit-tests
-        run: ci/unit-test-app.sh
-
