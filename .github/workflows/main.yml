@@ -5,18 +5,52 @@ jobs:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
     steps:
+
       - name: Clone down repository
         uses: actions/checkout@v4
-      - name: Build application
+
+      - name: Upload repo(after build)
         run: ci/build-app.sh
-  
-  Test:
+
+      - name: Upload a Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: .
+          include-hidden-files: true
+
+  Linting:
     runs-on: ubuntu-latest
-    container: gradle:6-jdk11
     needs: Build
     steps:
-      - name: Clone down repository
+      - name: Download code
+        uses: actions/download-artifact@v4
+        with:
+          name: code
+          path: .
+          
+      - name: Run Linting
+        uses: super-linter/super-linter/slim@v4
+        env:
+         DEFAULT_BRANCH: main
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  Test:
+    needs: Build
+    runs-on: ubuntu-latest
+    container: gradle:6-jdk11
+    steps:
+      
+      - name: Download code
+        uses: actions/download-artifact@v4
+        with:
+          name: code
+          path: .
+      
+      - name: checkout
         uses: actions/checkout@v4
-      - name: Run tests
+      
+      - name: Run unit-tests
         run: ci/unit-test-app.sh
-        
+
